@@ -27,7 +27,10 @@ import app.repoUsuarios
 import state.gymState
 import state.gymState.usuario
 @Composable
-fun loginusuario(onLoginOk: (usuario) -> Unit) {
+fun loginusuario(
+    onLoginOk: (usuario) -> Unit,
+    onBack: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -77,6 +80,7 @@ fun loginusuario(onLoginOk: (usuario) -> Unit) {
                     if (user != null && user.nombre_u == nombre) {
                         mensaje = "Login correcto: ${user.nombre_u}"
                         onLoginOk(user)
+
                     } else {
                         mensaje = "Login fallido"
                     }
@@ -93,4 +97,10 @@ fun loginusuario(onLoginOk: (usuario) -> Unit) {
 
             Text(mensaje)
         }
-    }}
+        Button(onClick = { onBack() }) {
+            Text("Volver al menu")
+        }
+    }
+
+
+}

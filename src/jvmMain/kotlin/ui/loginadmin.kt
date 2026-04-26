@@ -1,3 +1,5 @@
+package ui
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import app.gymestado
-import app.ElementDuplicatException
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -27,9 +27,9 @@ import app.repoUsuarios
 import state.gymState
 import state.gymState.usuario
 @Composable
-fun registrarusuario(
-    onLoginOk: (usuario) -> Unit,
-    onBack: () -> Unit
+fun loginadmin(
+    onBack: () -> Unit,
+    onLoginAdmin: () -> Unit
 ) {
 
     var id by remember { mutableStateOf("") }
@@ -46,18 +46,22 @@ fun registrarusuario(
 
         Spacer(Modifier.height(50.dp))
 
-        Text("Registrar usuario")
+        Text("Inicio de sesión")
+
+        Spacer(Modifier.height(16.dp))
 
         TextField(
             value = id,
             onValueChange = { id = it },
-            label = { Text("ID") }
+            label = { Text("ID") },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
         )
 
         TextField(
             value = nombre,
             onValueChange = { nombre = it },
-            label = { Text("Nombre") }
+            label = { Text("Nombre") },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
         )
 
         Spacer(Modifier.height(8.dp))
@@ -67,41 +71,29 @@ fun registrarusuario(
             try {
                 verficarNoElementosVacios(id, nombre)
 
-                if (regexexpressions.regex().validarusuario(nombre)) {
-
-                    if (gymestado.gimnasio.usuarioslista.any { it.id == id }) {
-                        throw ElementDuplicatException("ID ya existe")
-                    }
-
-                    val nuevo = usuario(id, nombre, 1)
-
-                    gymestado.gimnasio.usuarioslista.add(nuevo)
-                    repoUsuarios.save(nuevo)
-
-                    mensaje = "Usuario creado correctamente"
-
-                    onLoginOk(nuevo)
-
+                if (id == "1234" && nombre == "Admin") {
+                    mensaje = "Login correcto, eres admin"
+                    onLoginAdmin()
                 } else {
-                    mensaje = "El nombre no cumple reglas"
+                    mensaje = "Login fallido, no eres admin"
                 }
 
             } catch (e: ElementVacio) {
-                mensaje = e.message ?: "Error vacío"
-            } catch (e: ElementDuplicatException) {
-                mensaje = e.message ?: "Duplicado"
+                mensaje = e.message ?: "Error"
             }
 
         }) {
-            Text("Registrar")
+            Text("Iniciar sesión como admin")
         }
 
         Spacer(Modifier.height(8.dp))
 
         Text(mensaje)
 
+        Spacer(Modifier.height(16.dp))
+
         Button(onClick = onBack) {
-            Text("Volver al menu")
+            Text("Volver al menú")
         }
     }
 }

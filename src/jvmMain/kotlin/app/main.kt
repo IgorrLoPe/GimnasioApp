@@ -22,7 +22,9 @@ import state.gymState.UsuarioRepository
 import ui.loginusuario
 import ui.mainmenu
 import registrarusuario
-
+import ui.loginadmin
+import ui.menuUsuario
+import ui.menuAdmin
 val Gimnasio = gimnasio()
 val gymestado = gymState(Gimnasio)
 
@@ -84,9 +86,32 @@ fun App() {
     when (screen) {
 
         "MENU" -> mainmenu { screen = it }
-        "loginu" -> loginusuario { user -> usuarioiniciado = user
-            screen = "MENU" }
-        "registrarusuario" -> registrarusuario { user -> usuarioiniciado = user
-            screen = "MENU" }
+
+        "loginusuario" -> loginusuario(
+            onLoginOk = { user ->
+                usuarioiniciado = user
+                screen = "menuUsuario"
+            },
+            onBack = { screen = "MENU" }
+        )
+
+        "registrarusuario" -> registrarusuario(
+            onLoginOk = { user -> usuarioiniciado = user
+                screen = "menuUsuario" }, onBack = { screen = "MENU" })
+
+        "loginadmin" -> loginadmin(onLoginAdmin = { screen = "menuAdmin" }, onBack = { screen = "MENU" })
+
+
+
+        "menuUsuario" -> menuUsuario(user = usuarioiniciado!!, onBack = { screen = "MENU" })
+        "menuAdmin" -> menuAdmin(onBack = { screen = "MENU" })
+
+
+
     }
+
+
+
+
+
 }
