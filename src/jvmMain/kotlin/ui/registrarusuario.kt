@@ -27,10 +27,7 @@ import app.repoUsuarios
 import state.gymState
 import state.gymState.usuario
 @Composable
-fun registrarusuario(
-    onLoginOk: (usuario) -> Unit,
-    onBack: () -> Unit
-) {
+fun registrarusuario(onLoginOk: (usuario) -> Unit, onBack: () -> Unit) {
 
     var id by remember { mutableStateOf("") }
     var nombre by remember { mutableStateOf("") }

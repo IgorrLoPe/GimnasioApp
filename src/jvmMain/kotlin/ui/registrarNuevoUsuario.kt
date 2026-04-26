@@ -1,14 +1,10 @@
-package ui
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -21,48 +17,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import app.ElementDuplicatException
 import app.ElementVacio
+import app.gymestado
 import app.verficarNoElementosVacios
 import app.repoUsuarios
 import state.gymState
 import state.gymState.usuario
 @Composable
-fun loginusuario(onLoginOk: (usuario) -> Unit, onBack: () -> Unit) {
+fun registrarNuevoUsuario(usuarioActual: usuario, onBack: () -> Unit) {
 
-    Column(
-        modifier = Modifier
-
-            .fillMaxSize()
-            //sirve para cambiar el fondo de color e utilizado el sistema rgb debido a que es el que se utilizar
-            .background(Color(255, 39, 39, 255))
-            .padding(16.dp),
-
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(Modifier.height(50.dp))
-        Text(
-            "Inicio de sesion",
-            style = MaterialTheme.typography.h3
-        )
 
         var id by remember { mutableStateOf("") }
         var nombre by remember { mutableStateOf("") }
         var mensaje by remember { mutableStateOf("") }
 
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(255, 39, 39))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Spacer(Modifier.height(50.dp))
+
+            Text("Registrar nuevos usuarios: Registrar usuario nuevo")
 
             TextField(
                 value = id,
                 onValueChange = { id = it },
-                label = { Text("ID") },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                label = { Text("ID") }
             )
 
             TextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre") },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                label = { Text("Nombre") }
             )
 
             Spacer(Modifier.height(8.dp))
@@ -72,32 +63,44 @@ fun loginusuario(onLoginOk: (usuario) -> Unit, onBack: () -> Unit) {
                 try {
                     verficarNoElementosVacios(id, nombre)
 
-                    val user = repoUsuarios.findById(id)
+                    if (regexexpressions.regex().validarusuario(nombre)) {
 
-                    if (user != null && user.nombre_u == nombre) {
-                        mensaje = "Login correcto: ${user.nombre_u}"
-                        onLoginOk(user)
+                        if (gymestado.gimnasio.usuarioslista.any { it.id == id }) {
+                            throw ElementDuplicatException("ID ya existe")
+                        }
+
+                        val nuevo = usuario(id, nombre, 1)
+
+                        gymestado.gimnasio.usuarioslista.add(nuevo)
+                        repoUsuarios.save(nuevo)
+
+                        mensaje = "Usuario creado correctamente"
+
 
                     } else {
-                        mensaje = "Login fallido"
+                        mensaje = "El nombre no cumple reglas"
                     }
 
                 } catch (e: ElementVacio) {
-                    mensaje = e.message ?: "Error"
+                    mensaje = e.message ?: "Error vacío"
+                } catch (e: ElementDuplicatException) {
+                    mensaje = e.message ?: "Duplicado"
                 }
 
             }) {
-                Text("Iniciar sesión")
+                Text("Registrar")
             }
 
             Spacer(Modifier.height(8.dp))
 
             Text(mensaje)
+
+            Button(onClick = onBack) {
+                Text("Volver al menu")
+            }
         }
-        Button(onClick = { onBack() }) {
-            Text("Volver al menu")
-        }
-    }
+
+
 
 
 }

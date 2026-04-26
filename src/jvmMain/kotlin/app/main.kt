@@ -1,5 +1,5 @@
 package app
-
+import ui.verListaEjercicios
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -7,6 +7,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import registrarNuevoUsuario
+import ui.buscarPorNombre
+import ui.eliminarListaEjercicioss
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -22,9 +25,16 @@ import state.gymState.UsuarioRepository
 import ui.loginusuario
 import ui.mainmenu
 import registrarusuario
+import ui.buscarPorId
+import ui.crearListaAlimentoss
+import ui.crearListaEjercicios
+import ui.eliminarListaAlimentoss
+import ui.eliminarUsuarios
 import ui.loginadmin
 import ui.menuUsuario
 import ui.menuAdmin
+import ui.verListaAlimentoss
+
 val Gimnasio = gimnasio()
 val gymestado = gymState(Gimnasio)
 
@@ -57,8 +67,7 @@ fun verficarNoElementosVacios(id: String, nombre: String) {
 fun main() = application {
 
 
-    val adminInicial = usuario("1", "igor", 0)
-    repoUsuarios.save(adminInicial)
+
 
     Window(
         onCloseRequest = ::exitApplication,
@@ -103,8 +112,19 @@ fun App() {
 
 
 
-        "menuUsuario" -> menuUsuario(user = usuarioiniciado!!, onBack = { screen = "MENU" })
-        "menuAdmin" -> menuAdmin(onBack = { screen = "MENU" })
+        "menuUsuario" -> menuUsuario { screen = it }
+        "menuAdmin" -> menuAdmin({ screen = it })
+        "crearListaEjercicios" -> crearListaEjercicios(usuarioActual = usuarioiniciado!!, onBack = { screen = "menuUsuario" })
+        "verListaEjercicioss" -> verListaEjercicios(usuarioActual = usuarioiniciado!!, onBack = { screen = "menuUsuario" })
+        "eliminarListaEjercicioss" -> eliminarListaEjercicioss(usuarioActual = usuarioiniciado!!, onBack = { screen = "menuUsuario" })
+        "crearListaAlimentoss" -> crearListaAlimentoss(usuarioActual = usuarioiniciado!!, onBack = { screen = "menuUsuario" })
+        "verListaAlimentoss" -> verListaAlimentoss(usuarioActual = usuarioiniciado!!, onBack = { screen = "menuUsuario" })
+        "eliminarListaAlimentoss" -> eliminarListaAlimentoss(usuarioActual = usuarioiniciado!!, onBack = { screen = "menuUsuario" })
+        "eliminarUsuarios" -> eliminarUsuarios(usuarioActual = usuario(id_u = "1234", nombre_u = "Admin", rol_u = 1), onBack = { screen = "menuAdmin" })
+    "registrarNuevoUsuario" -> registrarNuevoUsuario(usuarioActual = usuario(id_u = "1234", nombre_u = "Admin", rol_u = 1), onBack = { screen = "menuAdmin" })
+    "buscarPorId" -> buscarPorId(usuarioActual = usuario(id_u = "1234", nombre_u = "Admin", rol_u = 1), onBack = { screen = "menuAdmin" })
+        "buscarPorNombre" -> buscarPorNombre(usuarioActual = usuario(id_u = "1234", nombre_u = "Admin", rol_u = 1), onBack = { screen = "menuAdmin" })
+
 
 
 

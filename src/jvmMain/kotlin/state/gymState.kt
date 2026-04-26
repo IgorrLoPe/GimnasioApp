@@ -18,6 +18,8 @@ import app.Gimnasio
 import app.repoUsuarios
 import regexexpressions.regex
 import state.gymState.UsuarioRepository
+
+//creo esta clase para actualizar la aplicacion a tiempo real y facilitar llamar a las funciones que usare en el gui
 class gymState(val gimnasio: gimnasio) {
 
     class UsuarioRepository(
@@ -87,7 +89,11 @@ class gymState(val gimnasio: gimnasio) {
 
         //para buscar en el json por id
         fun findById(id: String): usuario? {
-            return readFromFile().find { it.id == id }
+            val saved = readFromFile().find { it.id == id }
+            return saved?.let { usuarioGuardado ->
+                val enMemoria = Gimnasio.usuarioslista.find { it.id_u == usuarioGuardado.id_u }
+                enMemoria ?: usuarioGuardado
+            }
         }
 
         //para buscar en el json por nombre
@@ -272,13 +278,12 @@ class gymState(val gimnasio: gimnasio) {
 
         fun eliminarListaEjercicios(): Boolean {
             if (listaejercicios.isEmpty()) {
-                println("La lista de ejercicios no contiene nada")
                 return false
             }
             val idLista = id
             listaejercicios.clear()
             repoUsuarios.save(this)
-            println("Se a eliminado la lista de ejercicios bien de $nombre")
+
             return true
         }
 

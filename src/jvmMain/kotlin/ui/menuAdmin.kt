@@ -28,9 +28,7 @@ import state.gymState
 import state.gymState.usuario
 @Composable
 
-fun menuAdmin(
-    onBack: () -> Unit
-) {
+fun menuAdmin(onSelect: (String) -> Unit) {
     Column(
         modifier = Modifier
 
@@ -50,5 +48,29 @@ fun menuAdmin(
             "Bienvenido al menu de Admins",
             style = MaterialTheme.typography.h6
         )
+        Spacer(Modifier.height(50.dp))
+        Button( onClick = { onSelect("eliminarUsuarios") }) {
+            Text("Eliminar usuarios")
+        }
+
+
+        Spacer(Modifier.height(20.dp))
+        Button(
+            onClick = { onSelect("registrarNuevoUsuario") }){
+            Text("Agregar nuevos usuarios")
+        }
+
+        Spacer(Modifier.height(20.dp))
+        Button(
+            onClick ={ onSelect("buscarPorId") }){
+
+
+
+            Text("Buscar usuarios por ID")
+        }
+        Spacer(Modifier.height(20.dp))
+        Button( onClick = { onSelect("buscarPorNombre") }) {
+            Text("Buscar usuarios por nombre")
+        }
 
     }}

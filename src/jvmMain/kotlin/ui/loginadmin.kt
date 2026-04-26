@@ -27,10 +27,7 @@ import app.repoUsuarios
 import state.gymState
 import state.gymState.usuario
 @Composable
-fun loginadmin(
-    onBack: () -> Unit,
-    onLoginAdmin: () -> Unit
-) {
+fun loginadmin(onBack: () -> Unit, onLoginAdmin: () -> Unit) {
 
     var id by remember { mutableStateOf("") }
     var nombre by remember { mutableStateOf("") }
@@ -48,7 +45,7 @@ fun loginadmin(
 
         Text("Inicio de sesión")
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(25.dp))
 
         TextField(
             value = id,

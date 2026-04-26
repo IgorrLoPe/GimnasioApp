@@ -28,10 +28,7 @@ import state.gymState
 import state.gymState.usuario
 @Composable
 
-fun menuUsuario(
-    user: usuario,
-    onBack: () -> Unit
-) {
+fun menuUsuario(onSelect: (String) -> Unit) {
     Column(
         modifier = Modifier
 
@@ -42,7 +39,7 @@ fun menuUsuario(
 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(50.dp))
+        Spacer(Modifier.height(40.dp))
         Text(
             "Gimanasio de Igor",
             style = MaterialTheme.typography.h4
@@ -52,4 +49,49 @@ fun menuUsuario(
             style = MaterialTheme.typography.h6
         )
 
-}}
+        Spacer(Modifier.height(50.dp))
+        Button( onClick = { onSelect("crearListaEjercicios") }) {
+            Text("Crear lista de ejercicios")
+        }
+
+
+        Spacer(Modifier.height(20.dp))
+        Button(
+            onClick = { onSelect("verListaEjercicioss") },){
+            Text("Ver lista de ejercicios")
+        }
+
+        Spacer(Modifier.height(20.dp))
+        Button(
+            onClick ={ onSelect("eliminarListaEjercicioss") }) {
+
+
+
+            Text("Borrar lista de ejercicios")
+        }
+        Spacer(Modifier.height(30.dp))
+        Button( onClick = { onSelect("crearListaAlimentoss") }) {
+            Text("Crear lista de alimentos")
+        }
+
+
+        Spacer(Modifier.height(20.dp))
+        Button(
+            onClick = { onSelect("verListaAlimentoss") }){
+            Text("Ver lista de alimentos")
+        }
+
+        Spacer(Modifier.height(20.dp))
+        Button(
+            onClick ={ onSelect("eliminarListaAlimentoss") }){
+
+
+
+            Text("Borrar lista de alimentos")
+        }
+
+    }
+
+
+
+}
